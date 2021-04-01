@@ -1,0 +1,4 @@
+Place a zip file containing the "Knife Edge - Nose Gunner (USA).n64" ROM in this directory.
+It needs to be named "Knife Edge - Nose Gunner (USA).zip".
+
+The zip file needs to have this structure, but this is also the most commonly found convention when it comes to ROMs
