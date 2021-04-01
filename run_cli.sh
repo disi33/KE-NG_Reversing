@@ -2,8 +2,9 @@
 
 usage() {
     echo "usage: ./run_gui.sh [--help] [--original]"
-    echo "    --help:     display usage"
-    echo "    --original: run the original ROM rather than the modified one"
+    echo "    -h | --help:     display usage"
+    echo "    -o | --original: run the original ROM rather than the modified one"
+    echo "    -d | --debug:    start Mupen64Plus in debug mode"
 }
 
 SOURCE="${BASH_SOURCE[0]}"
@@ -15,23 +16,34 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 ROM_FILE=keng.n64
-if [[ ! -z "$1" ]]; then
-    if [[ "$1" == "--help" ]]; then
-        echo "Runs the ROM in Mupen64Plus Python GUI"
-        echo ""
-        usage
-        exit 0
-    elif [[ "$1" == "--original" ]]; then
-        ROM_FILE=Knife\ Edge\ -\ Nose\ Gunner\ \(USA\).n64
-    else
-        echo "Error: unknown parameter '$1'!"
-        echo ""
-        usage
-        exit 1
-    fi
-fi
+DEBUG_PARAM=""
 
-$DIR/stuff/mupen64plus-ui-console/build/bin/mupen64plus \
+while [ ! -z "$1" ];do
+    case "$1" in
+        -h|--help)
+            echo "Runs the ROM in Mupen64Plus Python GUI"
+            echo ""
+            usage
+            exit 0
+            ;;
+        -d|--debug)
+            shift
+            DEBUG_PARAM="--debug"
+            ;;
+        -o|--original)
+            shift
+            ROM_FILE=Knife\ Edge\ -\ Nose\ Gunner\ \(USA\).n64
+            ;;
+        *)
+            echo "Error: unknown parameter '$1'!"
+            echo ""
+            usage
+            exit 1
+    esac
+shift
+done
+
+$DIR/stuff/mupen64plus-ui-console/build/bin/mupen64plus $DEBUG_PARAM \
     --gfx $DIR/stuff/mp64plugins/mupen64plus/mupen64plus-video-rice.so \
     --audio $DIR/stuff/mp64plugins/mupen64plus/mupen64plus-audio-sdl.so \
     --input $DIR/stuff/mp64plugins/mupen64plus/mupen64plus-input-sdl.so \
